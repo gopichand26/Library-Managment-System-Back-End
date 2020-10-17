@@ -9,9 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 
@@ -19,19 +16,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Table(name="newspaper")
 public class Newspaper {
 	@Id
-	@Column(name="floorno")
+	
 	private int floorno;
-	
-	@Column(name="shelfno")
 	private String shelfno;
-	
-	@Column(name="name")
 	private String name;
-	
-	@DateTimeFormat(pattern = "dd-MM-yyyy")
-	@Column(name ="date")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-	Date date;
+	private Date date;
 	
 	public Newspaper() {
 		super();
@@ -47,24 +36,29 @@ public class Newspaper {
 		date = sdf.parse(strDate);
 		
 	}
+	
+	@Column(name="floorno",nullable=false)
 	public int getFloorno() {
 		return floorno;
 	}
 	public void setFloorno(int floorno) {
 		this.floorno = floorno;
 	}
+	@Column(name="shelfno",nullable=false)
 	public String getShelfno() {
 		return shelfno;
 	}
 	public void setShelfno(String shelfno) {
 		this.shelfno = shelfno;
 	}
+	@Column(name="name",nullable=false)
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
+	@Column(name ="date",nullable=false)
 	public Date getDate() {
 		return date;
 	}
