@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -16,7 +18,8 @@ import javax.persistence.Table;
 @Table(name="newspaper")
 public class Newspaper {
 	@Id
-	
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private int id;
 	private int floorno;
 	private String shelfno;
 	private String name;
@@ -27,14 +30,23 @@ public class Newspaper {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Newspaper(int floorno, String shelfno, String name, String strDate) throws ParseException {
+	public Newspaper(int id, int floorno, String shelfno, String name, String strDate) throws ParseException {
 		super();
+		this.id = id;
 		this.floorno = floorno;
 		this.shelfno = shelfno;
 		this.name = name;
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 		date = sdf.parse(strDate);
 		
+	}
+	
+	@Column(name="id",nullable=false)
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	@Column(name="floorno",nullable=false)
@@ -69,7 +81,7 @@ public class Newspaper {
 	public String toString() {
 		
 		String strDate = new SimpleDateFormat("dd-MM-yyyy").format(date);
-		return "Newspaper [floorno=" + floorno + ", shelfno=" + shelfno + ", name=" + name + ", date=" + strDate + "]";
+		return "Newspaper [id=" + id + ", floorno=" + floorno + ", shelfno=" + shelfno + ", name=" + name + ", date=" + strDate + "]";
 	}
 	
 }

@@ -52,6 +52,8 @@ public class MagazineController {
 	      Magazine _magazine = magazineData.get();
 	      _magazine.setFloorno(magazine.getFloorno());
 	      _magazine.setShelfno(magazine.getShelfno());
+	      _magazine.setName(magazine.getName());
+	      _magazine.setDate(magazine.getDate());
 	      return new ResponseEntity<>(magazineRepository.save(_magazine), HttpStatus.OK);
 	    } else {
 	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);

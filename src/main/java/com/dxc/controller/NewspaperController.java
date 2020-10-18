@@ -52,6 +52,8 @@ public class NewspaperController {
 	      Newspaper _newspaper = newspaperData.get();
 	      _newspaper.setFloorno(newspaper.getFloorno());
 	      _newspaper.setShelfno(newspaper.getShelfno());
+	      _newspaper.setName(newspaper.getName());
+	      _newspaper.setDate(newspaper.getDate());
 	      return new ResponseEntity<>(newspaperRepository.save(_newspaper), HttpStatus.OK);
 	    } else {
 	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
