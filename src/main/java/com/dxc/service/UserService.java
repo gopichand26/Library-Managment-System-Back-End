@@ -1,9 +1,9 @@
 package com.dxc.service;
 
+import java.util.List;
+
 import com.dxc.model.User;
 import com.dxc.model.UserDto;
-
-import java.util.List;
 
 public interface UserService {
 

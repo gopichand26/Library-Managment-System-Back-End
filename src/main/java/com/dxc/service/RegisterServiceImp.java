@@ -32,10 +32,9 @@ public class RegisterServiceImp implements RegisterService{
 		return registerRepository.findByName(name);
 	}
 	
-	public String edit(int id,String outtime) {
+	public void edit(int id,String outtime) {
 		LocalTime time = LocalTime.parse(outtime);
 		 registerRepository.update(id, time);
-		 return "out time saved successfully";
 	}
 
 }

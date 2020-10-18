@@ -8,6 +8,6 @@ public interface RegisterService {
 	public Register add(Register register);
 	public List<Register> showall();
 	public List<Register> findByName(String name);
-	public String edit(int id,String outtime);
+	public void edit(int id,String outtime);
 
 }

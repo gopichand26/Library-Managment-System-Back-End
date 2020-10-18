@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dxc.model.Register;
 import com.dxc.service.RegisterService;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 public class RegisterController {
 	
 	@Autowired
@@ -38,10 +39,9 @@ public class RegisterController {
 	}
 	
 	@PutMapping("register/{id}/{outtime}")
-	public String edit(@PathVariable int id,@PathVariable String outtime) {
+	public void edit(@PathVariable int id,@PathVariable String outtime) {
 		
 		 registerService.edit(id, outtime);
-		 return "out time saved successfully";
 	}
 	
 	

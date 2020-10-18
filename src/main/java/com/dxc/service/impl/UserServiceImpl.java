@@ -23,6 +23,7 @@ import com.dxc.service.UserService;
 @Service(value = "userService")
 public class UserServiceImpl implements UserDetailsService, UserService {
 	
+	
 	@Autowired
 	private UserDao userDao;
 
@@ -46,6 +47,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		userDao.findAll().iterator().forEachRemaining(list::add);
 		return list;
 	}
+	
 
 	@Override
 	public void delete(int id) {
