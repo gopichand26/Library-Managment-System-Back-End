@@ -4,6 +4,7 @@ package com.dxc.model;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,21 +24,20 @@ public class Magazine {
 	private int floorno;
 	private String shelfno;
 	private String name;
-	private Date date;
+	private LocalDate date;
 	
 	public Magazine() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Magazine(int id, int floorno, String shelfno, String name, String strDate) throws ParseException {
+	public Magazine(int id, int floorno, String shelfno, String name, LocalDate date) throws ParseException {
 		super();
 		this.id = id;
 		this.floorno = floorno;
 		this.shelfno = shelfno;
 		this.name = name;
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-		date = sdf.parse(strDate);
+		this.date=date;
 		
 	}
 	
@@ -70,10 +70,10 @@ public class Magazine {
 		this.name = name;
 	}
 	@Column(name ="date",nullable=false)
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 	@Override

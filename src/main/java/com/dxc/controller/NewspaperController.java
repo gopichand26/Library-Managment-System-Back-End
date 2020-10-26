@@ -1,11 +1,10 @@
 package com.dxc.controller;
-
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,78 +14,88 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dxc.model.Magazine;
 import com.dxc.model.Newspaper;
-import com.dxc.repository.NewspaperRepository;
+import com.dxc.service.NewspaperService;
 
-@RestController @CrossOrigin(origins="http://localhost:4200")
+@RestController 
 @RequestMapping("/api")
+
 public class NewspaperController {
-	
-	@Autowired
-	  NewspaperRepository newspaperRepository;
-	
-	@GetMapping("/newspapers")
-	public List<Newspaper> findAll() {
-		return  newspaperRepository.findAll();
+
+
+         @Autowired
+		 private NewspaperService newspaperService;
+		
+         
+         @GetMapping(value = "/newspapers")
+     	 public List<Newspaper> findAll() {
+     		return newspaperService.findAll();
+     	 }
+     	@CrossOrigin
+     	@GetMapping("/newspaper/{name}")
+     	public Optional<Newspaper> getNewspaperByName(@PathVariable String name) {
+     		
+     		Optional<Newspaper> newspaper =  newspaperService.findByName(name);
+     		
+     		if (newspaper == null) {
+     			throw new RuntimeException("Newspaper not found - " + name);
+     		}
+     		
+     		return newspaper;
+     	}
+     	@CrossOrigin
+     	@GetMapping("/newspapers/{date}")
+     	public List<Newspaper> getNewspaperByDate(@PathVariable String date) {
+     		
+     		List<Newspaper> newspaper = (List<Newspaper>) newspaperService.findByDate(date);
+     		
+     		if (newspaper == null) {
+     			throw new RuntimeException("Newspaper not found - " + date);
+     		}
+     		
+     		return newspaper;
+     	}
+     	
+     	@GetMapping("/newspapers/{name}/{date}")
+     	public Newspaper getNewspaper(@PathVariable String name, @PathVariable String date) {
+     		
+     		
+     		Newspaper newspaper = newspaperService.findById(name, date);
+     		
+     		if (newspaper == null) {
+     			throw new RuntimeException("Newspaper not found - " + name);
+     		}
+     		return newspaper ;
+     	}
+     	@CrossOrigin
+     	@PostMapping("/newspaper")
+     	public  Newspaper addNewspaper(@RequestBody Newspaper newspaper) {
+     		
+     				
+     		newspaperService.save(newspaper);
+     		return newspaper;
+     	}
+     	@CrossOrigin
+     	@PutMapping("/newspaper")
+     	public Newspaper updateNewspaper(@RequestBody Newspaper newspaper) {
+     		
+     		newspaperService.Update(newspaper);
+     		
+     		return newspaper;
+     	}
+     	
+     	 @GetMapping("/newspapers/one/{newsname}/{newsdate}")
+    	 public List<Newspaper> getNewsList(@PathVariable("newsname") String newsname,@PathVariable("newsdate") String newsdate ) {
+    		
+    		 return newspaperService.getNewsL(newsname,newsdate);
+    	 }
+    	 
+    	 @GetMapping("/newspapers/all/{newsname}")
+    	 public List<Newspaper> getNewsAll(@PathVariable("newsname") String newsname ) {
+    		 return newspaperService.getNewsAll(newsname);
+    	 }
+		    
 	}
-	 @GetMapping("/newspapers/{name}")
-	  public ResponseEntity<Newspaper> getNewspaperByName(@PathVariable("name") String name) {
-	    Optional<Newspaper> newspaperData = newspaperRepository.findByName(name);
-
-	    if (newspaperData.isPresent()) {
-	      return new ResponseEntity<>(newspaperData.get(), HttpStatus.OK);
-	    } else {
-	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	    }
-	  }
-	@PostMapping("/newspapers")
-	public  Newspaper addNewspaper(@RequestBody Newspaper newspaper) {
-		return newspaperRepository.save(newspaper);
-	}
-	 
-	 @PutMapping("/newspapers/{name}")
-	  public ResponseEntity<Newspaper> updateNewspaper(@PathVariable("name") String name, @RequestBody Newspaper newspaper) {
-	    Optional<Newspaper> newspaperData = newspaperRepository.findByName(name);
-
-	    if (newspaperData.isPresent()) {
-	      Newspaper _newspaper = newspaperData.get();
-	      _newspaper.setFloorno(newspaper.getFloorno());
-	      _newspaper.setShelfno(newspaper.getShelfno());
-	      _newspaper.setName(newspaper.getName());
-	      _newspaper.setDate(newspaper.getDate());
-	      return new ResponseEntity<>(newspaperRepository.save(_newspaper), HttpStatus.OK);
-	    } else {
-	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	    }
-	  }
-
-	 @GetMapping("/newspapers/name")
-	  public ResponseEntity<List<Newspaper>> findByName() {
-	    try {
-	      List<Newspaper> newspapers = newspaperRepository.findByName(true);
-
-	      if (newspapers.isEmpty()) {
-	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	      }
-	      return new ResponseEntity<>(newspapers, HttpStatus.OK);
-	    } catch (Exception e) {
-	      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
-	  }
-	 
-	 @GetMapping("/newspapers/date")
-	  public ResponseEntity<List<Newspaper>> findByDate() {
-	    try {
-	      List<Newspaper> newspapers = newspaperRepository.findByDate(true);
-
-	      if (newspapers.isEmpty()) {
-	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	      }
-	      return new ResponseEntity<>(newspapers, HttpStatus.OK);
-	    } catch (Exception e) {
-	      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
-	  }
 
 
-}

@@ -1,11 +1,10 @@
 package com.dxc.controller;
-
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,76 +16,85 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dxc.model.Magazine;
 import com.dxc.repository.MagazineRepository;
+import com.dxc.service.MagazineService;
 
-@RestController @CrossOrigin(origins="http://localhost:4200")
+@RestController 
 @RequestMapping("/api")
+
 public class MagazineController {
-	
-	@Autowired
-	  MagazineRepository magazineRepository;
-	
-	@GetMapping("/magazines")
-	public List<Magazine> findAll() {
-		return  magazineRepository.findAll();
+
+
+         @Autowired
+		 private MagazineService magazineService;
+		
+         
+         @GetMapping(value = "/magazines")
+     	 public List<Magazine> findAll() {
+     		return magazineService.findAll();
+     	 }
+     	@CrossOrigin
+     	@GetMapping("/magazine/{name}")
+     	public Optional<Magazine> getMagazineByName(@PathVariable String name) {
+     		
+     		Optional<Magazine> magazine =  magazineService.findByName(name);
+     		
+     		if (magazine == null) {
+     			throw new RuntimeException("Magazine not found - " + name);
+     		}
+     		
+     		return magazine;
+     	}
+     	@CrossOrigin
+     	@GetMapping("/magazines/{date}")
+     	public List<Magazine> getMagazineByDate(@PathVariable String datee) {
+     		LocalDate date=LocalDate.parse(datee);
+     		List<Magazine> magazine = (List<Magazine>) magazineService.findByDate(date);
+     		
+     		if (magazine == null) {
+     			throw new RuntimeException("Magazine not found - " + date);
+     		}
+     		
+     		return magazine;
+     	}
+     	
+     	@GetMapping("/magazines/{name}/{date}")
+     	public Magazine getMagazine(@PathVariable String name, @PathVariable String date) {
+     		LocalDate dat=LocalDate.parse(date);
+     		Magazine magazine = magazineService.findById(name, dat);
+     		
+     		if (magazine == null) {
+     			throw new RuntimeException("Magazine not found - " + name);
+     		}
+     		return magazine ;
+     	}
+     	@CrossOrigin
+     	@PostMapping("/magazine")
+     	public  Magazine addMagazine(@RequestBody Magazine magazine) {
+     		
+     				
+     		magazineService.save(magazine);
+     		return magazine;
+     	}
+     	@CrossOrigin
+     	@PutMapping("/magazine")
+     	public Magazine updateMagazine(@RequestBody Magazine magazine) {
+     		
+     		magazineService.Update(magazine);
+     		
+     		return magazine;
+     	}
+     	
+     	 @GetMapping("/magazines/one/{magname}/{magdate}")
+    	 public List<Magazine> getMagList(@PathVariable("magname") String magname,@PathVariable("magdate") String magdate ) {
+    		
+    		 return magazineService.getMagsL(magname,magdate);
+    	 }
+    	 
+    	 @GetMapping("/magazines/all/{magname}")
+    	 public List<Magazine> getMagAll(@PathVariable("magname") String magname ) {
+    		 return magazineService.getMagAll(magname);
+    	 }
+		    
 	}
-	 @GetMapping("/magazines/{name}")
-	  public ResponseEntity<Magazine> getMagazineByName(@PathVariable("name") String name) {
-	    Optional<Magazine> magazineData = magazineRepository.findByName(name);
-
-	    if (magazineData.isPresent()) {
-	      return new ResponseEntity<>(magazineData.get(), HttpStatus.OK);
-	    } else {
-	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	    }
-	  }
-	@PostMapping("/magazines")
-	public  Magazine addMagazine(@RequestBody Magazine magazine) {
-		return magazineRepository.save(magazine);
-	}
-	 
-	 @PutMapping("/magazines/{name}")
-	  public ResponseEntity<Magazine> updateMagazine(@PathVariable("name") String name, @RequestBody Magazine magazine) {
-	    Optional<Magazine> magazineData = magazineRepository.findByName(name);
-
-	    if (magazineData.isPresent()) {
-	      Magazine _magazine = magazineData.get();
-	      _magazine.setFloorno(magazine.getFloorno());
-	      _magazine.setShelfno(magazine.getShelfno());
-	      _magazine.setName(magazine.getName());
-	      _magazine.setDate(magazine.getDate());
-	      return new ResponseEntity<>(magazineRepository.save(_magazine), HttpStatus.OK);
-	    } else {
-	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	    }
-	  }
-
-	 @GetMapping("/magazines/name")
-	  public ResponseEntity<List<Magazine>> findByName() {
-	    try {
-	      List<Magazine> magazines = magazineRepository.findByName(true);
-
-	      if (magazines.isEmpty()) {
-	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	      }
-	      return new ResponseEntity<>(magazines, HttpStatus.OK);
-	    } catch (Exception e) {
-	      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
-	  }
-	 
-	 @GetMapping("/magazines/date")
-	  public ResponseEntity<List<Magazine>> findByDate() {
-	    try {
-	      List<Magazine> magazines = magazineRepository.findByDate(true);
-
-	      if (magazines.isEmpty()) {
-	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	      }
-	      return new ResponseEntity<>(magazines, HttpStatus.OK);
-	    } catch (Exception e) {
-	      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
-	  }
 
 
-}

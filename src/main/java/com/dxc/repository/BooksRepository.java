@@ -18,7 +18,7 @@ public interface BooksRepository extends JpaRepository<Books, Integer> {
 //
 //	Optional<Books> findByAuthor(String author);
 	@Query(value = "SELECT * FROM books WHERE title = :title", nativeQuery = true)
-    List<Books> findByTitle(@Param("title") String title );
+    Optional<Books> findByTitle(@Param("title") String title );
  
  @Query(value = "SELECT * FROM books WHERE title = :title AND author = :author", nativeQuery = true)
     Books findById(@Param("title") String title, @Param("author") String author);
@@ -28,5 +28,14 @@ public interface BooksRepository extends JpaRepository<Books, Integer> {
  
 
 	void save(Book theBook);
+	
+	@Query(value = "SELECT * FROM books WHERE title = :name" , nativeQuery = true)
+	List<Books> getBooks(@Param("name") String name);
+	
+	@Query(value = "SELECT * FROM books WHERE genre = :name" , nativeQuery = true)
+	List<Books> getBooksByGen(@Param("name") String name);
+	
+	@Query(value = "SELECT * FROM books WHERE author= :name" , nativeQuery = true)
+	List<Books> getBooksByAut(@Param("name") String name);
 
 }

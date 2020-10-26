@@ -1,21 +1,16 @@
 package com.dxc.service;
 
-import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.dxc.model.Register;
 import com.dxc.repository.RegisterRepository;
 
 @Service
-public class RegisterServiceImp implements RegisterService{
+public  class RegisterServiceImp implements RegisterService{
 	
 	@Autowired
 	RegisterRepository registerRepository;
@@ -32,9 +27,19 @@ public class RegisterServiceImp implements RegisterService{
 		return registerRepository.findByName(name);
 	}
 	
-	public void edit(int id,String outtime) {
-		LocalTime time = LocalTime.parse(outtime);
-		 registerRepository.update(id, time);
+	public void edit(int id,Register registerdet) {
+		 
+		Register register = registerRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("visitor not found for this id :: " + id));
+		register.setOuttime(registerdet.getOuttime());
+		
+		final Register updatedRegister = registerRepository.save(register);
 	}
+	
+	public Register getvisitor( int id)
+	{
+		return registerRepository.findById(id).orElse(new Register());
+	}
+	
 
 }
