@@ -29,6 +29,9 @@ public interface NewspaperRepository extends JpaRepository<Newspaper, String> {
 		List<Newspaper> getNewsL(@Param("newsname") String newsname,@Param("newsdate") LocalDate ndate);
 		@Query(value = "SELECT * FROM newspaper WHERE name = :newsname", nativeQuery = true)
 		List<Newspaper> getNewAll(@Param("newsname") String newsname);
+		
+		List<Newspaper> findById(boolean id);
+		Optional<Newspaper> findById(int id);
 	 
 
 }

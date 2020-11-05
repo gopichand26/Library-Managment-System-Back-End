@@ -1,6 +1,7 @@
 package com.dxc.controller;
 
 import com.dxc.model.ApiResponse;
+import com.dxc.model.Newspaper;
 import com.dxc.model.User;
 import com.dxc.model.UserDto;
 import com.dxc.service.UserService;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -27,6 +29,8 @@ public class UserController {
     public ApiResponse<List<User>> listUser(){
         return new ApiResponse<>(HttpStatus.OK.value(), "User list fetched successfully.",userService.findAll());
     }
+    
+    
 
     @GetMapping("/{id}")
     public ApiResponse<User> getOne(@PathVariable int id){

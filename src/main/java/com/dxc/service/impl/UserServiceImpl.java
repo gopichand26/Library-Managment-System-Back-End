@@ -13,15 +13,19 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.dxc.dao.UserDao;
+import com.dxc.model.Newspaper;
 import com.dxc.model.User;
 import com.dxc.model.UserDto;
+import com.dxc.repository.NewspaperRepository;
 import com.dxc.service.UserService;
 
 
 @Service(value = "userService")
 public class UserServiceImpl implements UserDetailsService, UserService {
+	
 	
 	
 	@Autowired
@@ -86,4 +90,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		newUser.setSalary(user.getSalary());
         return userDao.save(newUser);
     }
+    
+	
 }

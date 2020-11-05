@@ -31,6 +31,9 @@ public interface MagazineRepository extends JpaRepository<Magazine, String> {
 		
 		@Query(value = "SELECT * FROM magazine WHERE name = :magname", nativeQuery = true)
 		List<Magazine> getMagAll(@Param("magname") String magname);
+		
+		Optional<Magazine> findById(int id);
+		List<Magazine> findById(boolean id);
 	 
 
 }
